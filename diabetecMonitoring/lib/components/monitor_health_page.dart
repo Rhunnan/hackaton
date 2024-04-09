@@ -1,3 +1,4 @@
+import 'package:diabetec_monitoring/components/my_home_page.dart';
 import 'package:diabetec_monitoring/components/resultPage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -771,13 +772,22 @@ class _MonitorHealthPageState extends State<MonitorHealthPage> {
               ),
             ),
           ), //navigation Bar part
-          Container(
-            height: 44,
-            width: 169,
-            decoration: const BoxDecoration(
-                image: DecorationImage(
-                    image: AssetImage("assets/images/navbar.png"),
-                    fit: BoxFit.cover)),
+          //navigation Bar part
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const MyHomePage()),
+              );
+            },
+            child: Container(
+              height: 44,
+              width: 169,
+              decoration: const BoxDecoration(
+                  image: DecorationImage(
+                      image: AssetImage("assets/images/navbar.png"),
+                      fit: BoxFit.cover)),
+            ),
           )
         ],
       ),

@@ -1,3 +1,5 @@
+import 'package:diabetec_monitoring/components/my_home_page.dart';
+import 'package:diabetec_monitoring/components/uploadPage.dart';
 import 'package:flutter/material.dart';
 
 class splashGvcPage extends StatefulWidget {
@@ -73,21 +75,38 @@ class _splashGvState extends State<splashGvcPage> {
           ),
           Padding(
             padding: const EdgeInsets.only(bottom: 20.0),
-            child: Container(
-              height: 161,
-              width: 366,
-              decoration: const BoxDecoration(
-                  image: DecorationImage(
-                      image: AssetImage("assets/images/READY BUTTON.png"))),
+            child: InkWell(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const UploadPage()),
+                );
+              },
+              child: Container(
+                height: 161,
+                width: 366,
+                decoration: const BoxDecoration(
+                    image: DecorationImage(
+                        image: AssetImage("assets/images/READY BUTTON.png"))),
+              ),
             ),
           ),
-          Container(
-            height: 44,
-            width: 169,
-            decoration: const BoxDecoration(
-                image: DecorationImage(
-                    image: AssetImage("assets/images/navbar.png"),
-                    fit: BoxFit.cover)),
+          //navigation Bar part
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const MyHomePage()),
+              );
+            },
+            child: Container(
+              height: 44,
+              width: 169,
+              decoration: const BoxDecoration(
+                  image: DecorationImage(
+                      image: AssetImage("assets/images/navbar.png"),
+                      fit: BoxFit.cover)),
+            ),
           )
         ],
       ),

@@ -137,13 +137,21 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ),
         //navigation Bar part
-        Container(
-          height: 44,
-          width: 169,
-          decoration: const BoxDecoration(
-              image: DecorationImage(
-                  image: AssetImage("assets/images/navbar.png"),
-                  fit: BoxFit.cover)),
+        GestureDetector(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const MyHomePage()),
+            );
+          },
+          child: Container(
+            height: 44,
+            width: 169,
+            decoration: const BoxDecoration(
+                image: DecorationImage(
+                    image: AssetImage("assets/images/navbar.png"),
+                    fit: BoxFit.cover)),
+          ),
         )
       ],
     ));
