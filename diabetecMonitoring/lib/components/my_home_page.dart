@@ -1,4 +1,5 @@
 import 'package:diabetec_monitoring/components/monitor_health_page.dart';
+import 'package:diabetec_monitoring/components/splashGvc.dart';
 import 'package:flutter/material.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -86,7 +87,10 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ),
         InkWell(
-          onTap: () {},
+          onTap: () {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => const splashGvcPage()));
+          },
           child: Center(
             child: Padding(
               padding: const EdgeInsets.only(bottom: 10, right: 10),

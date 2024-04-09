@@ -1,3 +1,4 @@
+import 'package:diabetec_monitoring/components/resultPage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -749,13 +750,22 @@ class _MonitorHealthPageState extends State<MonitorHealthPage> {
                     ),
                   ),
                   //submit button
-                  Container(
-                    height: 69,
-                    width: 260,
-                    decoration: const BoxDecoration(
-                        image: DecorationImage(
-                            image:
-                                AssetImage("assets/images/submit-button.png"))),
+                  InkWell(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const resultPage()),
+                      );
+                    },
+                    child: Container(
+                      height: 69,
+                      width: 260,
+                      decoration: const BoxDecoration(
+                          image: DecorationImage(
+                              image: AssetImage(
+                                  "assets/images/submit-button.png"))),
+                    ),
                   )
                 ],
               ),
