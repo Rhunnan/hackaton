@@ -14,6 +14,8 @@ class _MonitorHealthPageState extends State<MonitorHealthPage> {
   bool isHypertensionNo = false;
   bool isSmokingYes = false;
   bool isSmokingNo = false;
+  bool maintainingInsulinYes = false;
+  bool maintainginInsulinNo = false;
   double bmiResult = 0;
   TextEditingController systolicController = TextEditingController();
   TextEditingController diastolicController = TextEditingController();
@@ -31,6 +33,11 @@ class _MonitorHealthPageState extends State<MonitorHealthPage> {
       }
       return color;
     });
+  }
+
+  //function to add calories
+  void addToCaloriesList(String text) {
+    caloriesList.add(text);
   }
 
   //function to calculate BMI
@@ -102,10 +109,9 @@ class _MonitorHealthPageState extends State<MonitorHealthPage> {
           ),
           Padding(
             padding: const EdgeInsets.only(bottom: 30),
-            child: Container(
+            child: SizedBox(
               height: 635,
               width: 360,
-              decoration: BoxDecoration(color: Colors.blue),
               child: ListView(
                 scrollDirection: Axis.vertical,
                 children: [
@@ -446,7 +452,7 @@ class _MonitorHealthPageState extends State<MonitorHealthPage> {
                           top: 20,
                         ),
                         child: Padding(
-                          padding: EdgeInsets.only(right: 200),
+                          padding: EdgeInsets.only(right: 220),
                           child: Text("Height (Centimeters)?"),
                         ),
                       ),
@@ -488,7 +494,7 @@ class _MonitorHealthPageState extends State<MonitorHealthPage> {
                           top: 20,
                         ),
                         child: Padding(
-                          padding: EdgeInsets.only(right: 200),
+                          padding: EdgeInsets.only(right: 320),
                           child: Text("BMI"),
                         ),
                       ),
@@ -523,9 +529,9 @@ class _MonitorHealthPageState extends State<MonitorHealthPage> {
                                 child: ElevatedButton(
                                     style: ButtonStyle(
                                         foregroundColor: getColors(
-                                            Colors.white, Colors.green),
+                                            Colors.white, Color(0xfff4c3c2)),
                                         backgroundColor: getColors(
-                                            Colors.green, Colors.white)),
+                                            Color(0xfff4c3c2), Colors.white)),
                                     onPressed: () {
                                       if (heightTextController
                                               .text.isNotEmpty &&
@@ -554,7 +560,7 @@ class _MonitorHealthPageState extends State<MonitorHealthPage> {
                           top: 20,
                         ),
                         child: Padding(
-                          padding: EdgeInsets.only(right: 150),
+                          padding: EdgeInsets.only(right: 180),
                           child: Text("Calories Intake For Today:"),
                         ),
                       ),
@@ -596,10 +602,18 @@ class _MonitorHealthPageState extends State<MonitorHealthPage> {
                                 child: ElevatedButton(
                                     style: ButtonStyle(
                                         foregroundColor: getColors(
-                                            Colors.white, Colors.green),
+                                            Colors.white, Color(0xfff4c3c2)),
                                         backgroundColor: getColors(
-                                            Colors.green, Colors.white)),
-                                    onPressed: () {},
+                                            Color(0xfff4c3c2), Colors.white)),
+                                    onPressed: () {
+                                      setState(() {
+                                        addToCaloriesList(
+                                            caloriesTextController.text);
+                                      });
+                                      caloriesTextController.clear();
+
+                                      print(caloriesList);
+                                    },
                                     child: const Text("Add")),
                               )
                             ],
@@ -608,6 +622,114 @@ class _MonitorHealthPageState extends State<MonitorHealthPage> {
                       ),
                     ],
                   ),
+                  Container(
+                      padding: EdgeInsets.only(top: 10),
+                      height: 50,
+                      width: 368,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        color: const Color(0xffEFE5E5),
+                      ),
+                      child: caloriesList.isEmpty
+                          ? const Text("")
+                          : ListView.builder(
+                              itemCount: caloriesList.length,
+                              scrollDirection: Axis.horizontal,
+                              itemBuilder: (BuildContext context, int index) {
+                                return Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 8.0),
+                                  child: Text(
+                                    "${caloriesList[index]}kcal",
+                                    style: const TextStyle(fontSize: 20),
+                                  ),
+                                );
+                              },
+                            )),
+                  //mainting insulin question checkbox
+                  const Padding(
+                    padding: EdgeInsets.only(right: 60, top: 10, bottom: 10),
+                    child: Text(
+                      "Do you maintain insulin?",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w300,
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 10),
+                    child: Container(
+                      height: 37,
+                      width: 368,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        color: const Color(0xffEFE5E5),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 8.0),
+                        child: Row(
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  maintainingInsulinYes = true;
+                                  maintainginInsulinNo = false;
+                                });
+                              },
+                              child: Icon(
+                                isHypertensionYes
+                                    ? Icons.check_box
+                                    : Icons.check_box_outline_blank,
+                              ),
+                            ),
+                            const Text("Yes"),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 10),
+                    child: Container(
+                      height: 37,
+                      width: 368,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        color: const Color(0xffEFE5E5),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 8.0),
+                        child: Row(
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  maintainginInsulinNo = true;
+                                  maintainingInsulinYes = false;
+                                });
+                              },
+                              child: Icon(
+                                isHypertensionNo
+                                    ? Icons.check_box
+                                    : Icons.check_box_outline_blank,
+                              ),
+                            ),
+                            const Text("No"),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  //submit button
+                  Container(
+                    height: 69,
+                    width: 260,
+                    decoration: const BoxDecoration(
+                        image: DecorationImage(
+                            image:
+                                AssetImage("assets/images/submit-button.png"))),
+                  )
                 ],
               ),
             ),
