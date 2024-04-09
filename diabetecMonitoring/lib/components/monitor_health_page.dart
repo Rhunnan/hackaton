@@ -56,6 +56,21 @@ class _MonitorHealthPageState extends State<MonitorHealthPage> {
     return weight / (height * height);
   }
 
+  DateTime selectedDate = DateTime.now();
+
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+        context: context,
+        initialDate: selectedDate,
+        firstDate: DateTime(2015, 8),
+        lastDate: DateTime(2101));
+    if (picked != null && picked != selectedDate) {
+      setState(() {
+        selectedDate = picked;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -101,7 +116,7 @@ class _MonitorHealthPageState extends State<MonitorHealthPage> {
           ),
           //greeting Text
           const Padding(
-            padding: EdgeInsets.only(top: 30, right: 30),
+            padding: EdgeInsets.only(top: 30, bottom: 50, right: 30),
             child: Text(
               "Hello,\nHow are you feeling today?",
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.w700),
@@ -110,7 +125,7 @@ class _MonitorHealthPageState extends State<MonitorHealthPage> {
           Padding(
             padding: const EdgeInsets.only(bottom: 30),
             child: SizedBox(
-              height: 635,
+              height: 585,
               width: 360,
               child: ListView(
                 scrollDirection: Axis.vertical,
@@ -208,6 +223,18 @@ class _MonitorHealthPageState extends State<MonitorHealthPage> {
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(20),
                                   color: const Color(0xffEFE5E5),
+                                ),
+                                child: Row(
+                                  children: [
+                                    IconButton(
+                                      icon: Icon(Icons.calendar_month),
+                                      onPressed: () {
+                                        _selectDate(context);
+                                      },
+                                    ),
+                                    Text("${selectedDate.toLocal()}"
+                                        .split(' ')[0]),
+                                  ],
                                 ),
                                 //ibutang diri ang date nga widget
                               ),
