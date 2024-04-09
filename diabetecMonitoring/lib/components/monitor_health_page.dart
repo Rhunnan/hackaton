@@ -14,6 +14,7 @@ class _MonitorHealthPageState extends State<MonitorHealthPage> {
   bool isHypertensionNo = false;
   bool isSmokingYes = false;
   bool isSmokingNo = false;
+  double bmiResult = 0;
   TextEditingController systolicController = TextEditingController();
   TextEditingController diastolicController = TextEditingController();
   TextEditingController smokingYearsController = TextEditingController();
@@ -30,6 +31,22 @@ class _MonitorHealthPageState extends State<MonitorHealthPage> {
       }
       return color;
     });
+  }
+
+  //function to calculate BMI
+  double getBmi(TextEditingController weightController,
+      TextEditingController heightController) {
+    double weight = double.tryParse(weightController.text) ?? 0.0;
+    double height = double.tryParse(heightController.text) ?? 0.0;
+
+    // Convert height from cm to meters
+    height = height / 100.0;
+
+    if (weight <= 0 || height <= 0) {
+      return 0.0; // Return 0 if weight or height is not valid
+    }
+
+    return weight / (height * height);
   }
 
   @override
@@ -83,157 +100,274 @@ class _MonitorHealthPageState extends State<MonitorHealthPage> {
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.w700),
             ),
           ),
-          Container(
-            height: 665,
-            width: 360,
-            decoration: BoxDecoration(color: Colors.blue),
-            child: ListView(
-              scrollDirection: Axis.vertical,
-              children: [
-                //questions
-                const Padding(
-                  padding: EdgeInsets.only(right: 60, top: 50, bottom: 10),
-                  child: Text(
-                    "Do you have a history with Hypertension?",
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w300,
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 10),
-                  child: Container(
-                    height: 37,
-                    width: 368,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      color: const Color(0xffEFE5E5),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 8.0),
-                      child: Row(
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                isHypertensionYes = true;
-                                isHypertensionNo = false;
-                              });
-                            },
-                            child: Icon(
-                              isHypertensionYes
-                                  ? Icons.check_box
-                                  : Icons.check_box_outline_blank,
-                            ),
-                          ),
-                          const Text("Yes"),
-                        ],
+          Padding(
+            padding: const EdgeInsets.only(bottom: 30),
+            child: Container(
+              height: 635,
+              width: 360,
+              decoration: BoxDecoration(color: Colors.blue),
+              child: ListView(
+                scrollDirection: Axis.vertical,
+                children: [
+                  //questions
+                  const Padding(
+                    padding: EdgeInsets.only(right: 60, top: 50, bottom: 10),
+                    child: Text(
+                      "Do you have a history with Hypertension?",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w300,
                       ),
                     ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 10),
-                  child: Container(
-                    height: 37,
-                    width: 368,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      color: const Color(0xffEFE5E5),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 8.0),
-                      child: Row(
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                isHypertensionNo = true;
-                                isHypertensionYes = false;
-                              });
-                            },
-                            child: Icon(
-                              isHypertensionNo
-                                  ? Icons.check_box
-                                  : Icons.check_box_outline_blank,
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 10),
+                    child: Container(
+                      height: 37,
+                      width: 368,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        color: const Color(0xffEFE5E5),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 8.0),
+                        child: Row(
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  isHypertensionYes = true;
+                                  isHypertensionNo = false;
+                                });
+                              },
+                              child: Icon(
+                                isHypertensionYes
+                                    ? Icons.check_box
+                                    : Icons.check_box_outline_blank,
+                              ),
                             ),
-                          ),
-                          const Text("No"),
-                        ],
+                            const Text("Yes"),
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                ),
-                //show this if ishypertionYes is True this is the calendar part
-                isHypertensionYes
-                    ? Column(
-                        children: [
-                          const Padding(
-                            padding: EdgeInsets.only(right: 100),
-                            child: Text("When was the Hypertension diagnose?"),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 10, bottom: 10),
-                            child: Container(
-                              height: 37,
-                              width: 368,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20),
-                                color: const Color(0xffEFE5E5),
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 10),
+                    child: Container(
+                      height: 37,
+                      width: 368,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        color: const Color(0xffEFE5E5),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 8.0),
+                        child: Row(
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  isHypertensionNo = true;
+                                  isHypertensionYes = false;
+                                });
+                              },
+                              child: Icon(
+                                isHypertensionNo
+                                    ? Icons.check_box
+                                    : Icons.check_box_outline_blank,
                               ),
-                              //ibutang diri ang date nga widget
                             ),
-                          ),
-                          const Padding(
-                            padding: EdgeInsets.only(right: 135),
-                            child: Text("Highest Blood Pressure recorded?"),
-                          ),
-                          //uppper part sa blood pressure
-                          const Padding(
-                            padding: EdgeInsets.only(right: 295, top: 10.0),
-                            child: Text("Systolic"),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 10, bottom: 10),
-                            child: Container(
-                              height: 37,
-                              width: 368,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20),
-                                color: const Color(0xffEFE5E5),
+                            const Text("No"),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  //show this if ishypertionYes is True this is the calendar part
+                  isHypertensionYes
+                      ? Column(
+                          children: [
+                            const Padding(
+                              padding: EdgeInsets.only(right: 100),
+                              child:
+                                  Text("When was the Hypertension diagnose?"),
+                            ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.only(top: 10, bottom: 10),
+                              child: Container(
+                                height: 37,
+                                width: 368,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20),
+                                  color: const Color(0xffEFE5E5),
+                                ),
+                                //ibutang diri ang date nga widget
                               ),
-                              child: Center(
-                                child: Padding(
-                                  padding: const EdgeInsets.only(left: 20.0),
-                                  child: TextField(
-                                    keyboardType: TextInputType.number,
-                                    controller: systolicController,
-                                    inputFormatters: <TextInputFormatter>[
-                                      FilteringTextInputFormatter.digitsOnly
-                                    ],
-                                    style: const TextStyle(
-                                      fontSize: 20,
+                            ),
+                            const Padding(
+                              padding: EdgeInsets.only(right: 135),
+                              child: Text("Highest Blood Pressure recorded?"),
+                            ),
+                            //uppper part sa blood pressure
+                            const Padding(
+                              padding: EdgeInsets.only(right: 295, top: 10.0),
+                              child: Text("Systolic"),
+                            ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.only(top: 10, bottom: 10),
+                              child: Container(
+                                height: 37,
+                                width: 368,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20),
+                                  color: const Color(0xffEFE5E5),
+                                ),
+                                child: Center(
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(left: 20.0),
+                                    child: TextField(
+                                      keyboardType: TextInputType.number,
+                                      controller: systolicController,
+                                      inputFormatters: <TextInputFormatter>[
+                                        FilteringTextInputFormatter.digitsOnly
+                                      ],
+                                      style: const TextStyle(
+                                        fontSize: 20,
+                                      ),
+                                      decoration: const InputDecoration(
+                                          border: InputBorder.none,
+                                          hintText: 'Input Numbers',
+                                          hintStyle: TextStyle(fontSize: 14)),
                                     ),
-                                    decoration: const InputDecoration(
-                                        border: InputBorder.none,
-                                        hintText: 'Input Numbers',
-                                        hintStyle: TextStyle(fontSize: 14)),
                                   ),
                                 ),
                               ),
                             ),
-                          ),
-                          //lower part sa blood pressure
-                          const Padding(
-                            padding: EdgeInsets.only(right: 295, top: 10.0),
-                            child: Text(
-                              "Diastolic",
+                            //lower part sa blood pressure
+                            const Padding(
+                              padding: EdgeInsets.only(right: 295, top: 10.0),
+                              child: Text(
+                                "Diastolic",
+                              ),
                             ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 10, bottom: 10),
-                            child: Container(
+                            Padding(
+                              padding:
+                                  const EdgeInsets.only(top: 10, bottom: 10),
+                              child: Container(
+                                  height: 37,
+                                  width: 368,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(20),
+                                    color: const Color(0xffEFE5E5),
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(left: 20.0),
+                                    child: TextField(
+                                      keyboardType: TextInputType.number,
+                                      controller: diastolicController,
+                                      inputFormatters: <TextInputFormatter>[
+                                        FilteringTextInputFormatter.digitsOnly
+                                      ],
+                                      style: const TextStyle(
+                                        fontSize: 20,
+                                      ),
+                                      decoration: const InputDecoration(
+                                          border: InputBorder.none,
+                                          hintText: 'Input Numbers',
+                                          hintStyle: TextStyle(fontSize: 14)),
+                                    ),
+                                  )),
+                            ),
+                          ],
+                        )
+                      : //if ang hypertension is wala sya kasuway
+                      Text(""),
+                  //smoking question part question yes or no
+                  Text("Do You Smoke ?"),
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 10),
+                    child: Container(
+                      height: 37,
+                      width: 368,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        color: const Color(0xffEFE5E5),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 8.0),
+                        child: Row(
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  isSmokingYes = true;
+                                  isSmokingNo = false;
+                                });
+                              },
+                              child: Icon(
+                                isSmokingYes
+                                    ? Icons.check_box
+                                    : Icons.check_box_outline_blank,
+                              ),
+                            ),
+                            const Text("Yes"),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 10),
+                    child: Container(
+                      height: 37,
+                      width: 368,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        color: const Color(0xffEFE5E5),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 8.0),
+                        child: Row(
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  isSmokingNo = true;
+                                  isSmokingYes = false;
+                                });
+                              },
+                              child: Icon(
+                                isSmokingNo
+                                    ? Icons.check_box
+                                    : Icons.check_box_outline_blank,
+                              ),
+                            ),
+                            const Text("No"),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  //here add howmany years textfield if is smoking is true
+                  isSmokingYes
+                      ? Column(
+                          children: [
+                            const Padding(
+                              padding: EdgeInsets.only(
+                                top: 20,
+                              ),
+                              child: Padding(
+                                padding: EdgeInsets.only(right: 220),
+                                child: Text("For how many years?"),
+                              ),
+                            ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.only(top: 10, bottom: 10),
+                              child: Container(
                                 height: 37,
                                 width: 368,
                                 decoration: BoxDecoration(
@@ -244,7 +378,7 @@ class _MonitorHealthPageState extends State<MonitorHealthPage> {
                                   padding: const EdgeInsets.only(left: 20.0),
                                   child: TextField(
                                     keyboardType: TextInputType.number,
-                                    controller: diastolicController,
+                                    controller: smokingYearsController,
                                     inputFormatters: <TextInputFormatter>[
                                       FilteringTextInputFormatter.digitsOnly
                                     ],
@@ -254,284 +388,228 @@ class _MonitorHealthPageState extends State<MonitorHealthPage> {
                                     decoration: const InputDecoration(
                                         border: InputBorder.none,
                                         hintText: 'Input Numbers',
-                                        hintStyle: TextStyle(fontSize: 14)),
+                                        hintStyle: TextStyle(fontSize: 15)),
                                   ),
-                                )),
-                          ),
-                        ],
-                      )
-                    : //if ang hypertension is wala sya kasuway
-                    Text(""),
-                //smoking question part question yes or no
-                Text("Do You Smoke ?"),
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 10),
-                  child: Container(
-                    height: 37,
-                    width: 368,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      color: const Color(0xffEFE5E5),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 8.0),
-                      child: Row(
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                isSmokingYes = true;
-                                isSmokingNo = false;
-                              });
-                            },
-                            child: Icon(
-                              isSmokingYes
-                                  ? Icons.check_box
-                                  : Icons.check_box_outline_blank,
-                            ),
-                          ),
-                          const Text("Yes"),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 10),
-                  child: Container(
-                    height: 37,
-                    width: 368,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      color: const Color(0xffEFE5E5),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 8.0),
-                      child: Row(
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                isSmokingNo = true;
-                                isSmokingYes = false;
-                              });
-                            },
-                            child: Icon(
-                              isSmokingNo
-                                  ? Icons.check_box
-                                  : Icons.check_box_outline_blank,
-                            ),
-                          ),
-                          const Text("No"),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                //here add howmany years textfield if is smoking is true
-                isSmokingYes
-                    ? Column(
-                        children: [
-                          const Padding(
-                            padding: EdgeInsets.only(
-                              top: 20,
-                            ),
-                            child: Padding(
-                              padding: EdgeInsets.only(right: 220),
-                              child: Text("For how many years?"),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 10, bottom: 10),
-                            child: Container(
-                              height: 37,
-                              width: 368,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20),
-                                color: const Color(0xffEFE5E5),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.only(left: 20.0),
-                                child: TextField(
-                                  keyboardType: TextInputType.number,
-                                  controller: smokingYearsController,
-                                  inputFormatters: <TextInputFormatter>[
-                                    FilteringTextInputFormatter.digitsOnly
-                                  ],
-                                  style: const TextStyle(
-                                    fontSize: 20,
-                                  ),
-                                  decoration: const InputDecoration(
-                                      border: InputBorder.none,
-                                      hintText: 'Input Numbers',
-                                      hintStyle: TextStyle(fontSize: 15)),
                                 ),
                               ),
                             ),
-                          ),
-                        ],
-                      )
-                    : Text(""),
-                //for weight in kilograms
-                Column(
-                  children: [
-                    const Padding(
-                      padding: EdgeInsets.only(
-                        top: 20,
-                      ),
-                      child: Padding(
-                        padding: EdgeInsets.only(right: 230),
-                        child: Text("Weight (Kilograms)?"),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 10, bottom: 10),
-                      child: Container(
-                        height: 37,
-                        width: 368,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
-                          color: const Color(0xffEFE5E5),
+                          ],
+                        )
+                      : Text(""),
+                  //for weight in kilograms
+                  Column(
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.only(
+                          top: 20,
                         ),
                         child: Padding(
-                          padding: const EdgeInsets.only(left: 20.0),
-                          child: TextField(
-                            keyboardType: TextInputType.number,
-                            controller: weightTextController,
-                            inputFormatters: <TextInputFormatter>[
-                              FilteringTextInputFormatter.digitsOnly
-                            ],
-                            style: const TextStyle(
-                              fontSize: 20,
+                          padding: EdgeInsets.only(right: 230),
+                          child: Text("Weight (Kilograms)?"),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 10, bottom: 10),
+                        child: Container(
+                          height: 37,
+                          width: 368,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                            color: const Color(0xffEFE5E5),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 20.0),
+                            child: TextField(
+                              keyboardType: TextInputType.number,
+                              controller: weightTextController,
+                              inputFormatters: <TextInputFormatter>[
+                                FilteringTextInputFormatter.digitsOnly
+                              ],
+                              style: const TextStyle(
+                                fontSize: 20,
+                              ),
+                              decoration: const InputDecoration(
+                                  border: InputBorder.none,
+                                  hintText: 'Input Numbers',
+                                  hintStyle: TextStyle(fontSize: 15)),
                             ),
-                            decoration: const InputDecoration(
-                                border: InputBorder.none,
-                                hintText: 'Input Numbers',
-                                hintStyle: TextStyle(fontSize: 15)),
                           ),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-                //for height
-                Column(
-                  children: [
-                    const Padding(
-                      padding: EdgeInsets.only(
-                        top: 20,
-                      ),
-                      child: Padding(
-                        padding: EdgeInsets.only(right: 200),
-                        child: Text("Height (Centimeters)?"),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 10, bottom: 10),
-                      child: Container(
-                        height: 37,
-                        width: 368,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
-                          color: const Color(0xffEFE5E5),
+                    ],
+                  ),
+                  //for height
+                  Column(
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.only(
+                          top: 20,
                         ),
                         child: Padding(
-                          padding: const EdgeInsets.only(left: 20.0),
-                          child: TextField(
-                            keyboardType: TextInputType.number,
-                            controller: heightTextController,
-                            inputFormatters: <TextInputFormatter>[
-                              FilteringTextInputFormatter.digitsOnly
-                            ],
-                            style: const TextStyle(
-                              fontSize: 20,
+                          padding: EdgeInsets.only(right: 200),
+                          child: Text("Height (Centimeters)?"),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 10, bottom: 10),
+                        child: Container(
+                          height: 37,
+                          width: 368,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                            color: const Color(0xffEFE5E5),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 20.0),
+                            child: TextField(
+                              keyboardType: TextInputType.number,
+                              controller: heightTextController,
+                              inputFormatters: <TextInputFormatter>[
+                                FilteringTextInputFormatter.digitsOnly
+                              ],
+                              style: const TextStyle(
+                                fontSize: 20,
+                              ),
+                              decoration: const InputDecoration(
+                                  border: InputBorder.none,
+                                  hintText: 'Input Numbers',
+                                  hintStyle: TextStyle(fontSize: 15)),
                             ),
-                            decoration: const InputDecoration(
-                                border: InputBorder.none,
-                                hintText: 'Input Numbers',
-                                hintStyle: TextStyle(fontSize: 15)),
                           ),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-                //for BMI
-                Column(
-                  children: [
-                    const Padding(
-                      padding: EdgeInsets.only(
-                        top: 20,
-                      ),
-                      child: Padding(
-                        padding: EdgeInsets.only(right: 200),
-                        child: Text("BMI"),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 10, bottom: 10),
-                      child: Container(
-                        height: 37,
-                        width: 368,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
-                          color: const Color(0xffEFE5E5),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                //for Calories intake textfield
-                Column(
-                  children: [
-                    const Padding(
-                      padding: EdgeInsets.only(
-                        top: 20,
-                      ),
-                      child: Padding(
-                        padding: EdgeInsets.only(right: 200),
-                        child: Text("Calories intake for today:"),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 10, bottom: 10),
-                      child: Container(
-                        height: 37,
-                        width: 368,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
-                          color: const Color(0xffEFE5E5),
+                    ],
+                  ),
+                  //for BMI
+                  Column(
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.only(
+                          top: 20,
                         ),
                         child: Padding(
-                          padding: const EdgeInsets.only(left: 20.0),
-                          child: TextField(
-                            keyboardType: TextInputType.number,
-                            controller: caloriesTextController,
-                            inputFormatters: <TextInputFormatter>[
-                              FilteringTextInputFormatter.digitsOnly
+                          padding: EdgeInsets.only(right: 200),
+                          child: Text("BMI"),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 10, bottom: 10),
+                        child: Container(
+                          height: 37,
+                          width: 368,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                            color: const Color(0xffEFE5E5),
+                          ),
+                          child: Row(
+                            children: [
+                              bmiResult == 0
+                                  ? const SizedBox(
+                                      height: 30, width: 200, child: Text(""))
+                                  : SizedBox(
+                                      height: 30,
+                                      width: 200,
+                                      child: Padding(
+                                        padding:
+                                            const EdgeInsets.only(left: 20),
+                                        child: Text(
+                                          bmiResult.toStringAsFixed(2),
+                                          style: const TextStyle(fontSize: 20),
+                                        ),
+                                      )),
+                              SizedBox(
+                                height: 30,
+                                width: 150,
+                                child: ElevatedButton(
+                                    style: ButtonStyle(
+                                        foregroundColor: getColors(
+                                            Colors.white, Colors.green),
+                                        backgroundColor: getColors(
+                                            Colors.green, Colors.white)),
+                                    onPressed: () {
+                                      if (heightTextController
+                                              .text.isNotEmpty &&
+                                          weightTextController
+                                              .text.isNotEmpty) {
+                                        return setState(() {
+                                          bmiResult = getBmi(
+                                              weightTextController,
+                                              heightTextController);
+                                        });
+                                      }
+                                    },
+                                    child: const Text("Calculate BMI")),
+                              )
                             ],
-                            style: const TextStyle(
-                              fontSize: 20,
-                            ),
-                            decoration: const InputDecoration(
-                                border: InputBorder.none,
-                                hintText: 'Input Numbers',
-                                hintStyle: TextStyle(fontSize: 15)),
                           ),
                         ),
                       ),
-                    ),
-                    ElevatedButton(
-                        style: ButtonStyle(
-                            foregroundColor:
-                                getColors(Colors.white, Colors.green),
-                            backgroundColor:
-                                getColors(Colors.green, Colors.white)),
-                        onPressed: () {},
-                        child: const Text("Add"))
-                  ],
-                ),
-              ],
+                    ],
+                  ),
+                  //for Calories intake textfield
+                  Column(
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.only(
+                          top: 20,
+                        ),
+                        child: Padding(
+                          padding: EdgeInsets.only(right: 150),
+                          child: Text("Calories Intake For Today:"),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 10, bottom: 10),
+                        child: Container(
+                          height: 37,
+                          width: 368,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                            color: const Color(0xffEFE5E5),
+                          ),
+                          child: Row(
+                            children: [
+                              SizedBox(
+                                height: 30,
+                                width: 250,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left: 20),
+                                  child: TextField(
+                                    keyboardType: TextInputType.number,
+                                    controller: caloriesTextController,
+                                    inputFormatters: <TextInputFormatter>[
+                                      FilteringTextInputFormatter.digitsOnly
+                                    ],
+                                    style: const TextStyle(
+                                      fontSize: 20,
+                                    ),
+                                    decoration: const InputDecoration(
+                                        border: InputBorder.none,
+                                        hintText: 'Input Numbers',
+                                        hintStyle: TextStyle(fontSize: 15)),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                height: 30,
+                                width: 100,
+                                child: ElevatedButton(
+                                    style: ButtonStyle(
+                                        foregroundColor: getColors(
+                                            Colors.white, Colors.green),
+                                        backgroundColor: getColors(
+                                            Colors.green, Colors.white)),
+                                    onPressed: () {},
+                                    child: const Text("Add")),
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ), //navigation Bar part
           Container(

@@ -53,9 +53,13 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
         ),
         //App Name
-        const Text(
-          "Name",
-          style: TextStyle(fontSize: 40, fontWeight: FontWeight.w700),
+        Container(
+          height: 61,
+          width: 281,
+          decoration: const BoxDecoration(
+              image: DecorationImage(
+                  image: AssetImage("assets/images/logo.png"),
+                  fit: BoxFit.cover)),
         ),
         //services buttons part
         InkWell(
